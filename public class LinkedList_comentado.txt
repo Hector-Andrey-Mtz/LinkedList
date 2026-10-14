@@ -1,0 +1,203 @@
+public class linkedList {
+     private Node head;
+    private Node tail;
+    private int length;
+    //creacion de un nodo y sus componentes
+    class Node{
+        int value;
+        Node next;
+        public Node(int value){
+            this.value=value;
+        }
+    }
+    //crear un linkedList partiendo del nodo 0
+    public linkedList (int value){
+        Node newNode=new Node(value);
+        length=1;
+        head=newNode;
+        tail=newNode;
+    }
+    //muestra cual es el nodo head actual
+    public void getHead(){
+        System.out.println("Head:" + head.value);
+    }
+    //muestra el nodo tail actual
+    public void getTail(){
+        System.out.println("Tail:" + tail.value);
+    }
+    //muestra el largo del linkedList
+    public void getLength(){
+            System.out.println("Length:" + length);
+    }
+    //agregar un nuevo nodo a la lista ligada
+    public void append(int value){
+        if(length==0){//si la lista esta vacia
+            Node newNode=new Node(value);
+            length=1;
+            head=newNode;
+            tail=newNode;
+            return;
+        }
+        Node newNode=new Node(value);
+        tail.next=newNode;
+        tail=newNode;
+        length++;
+    }
+    //imprime el linkedList actual
+    public void printList(){
+        Node temp=head;
+        while(temp!=null){
+            System.out.println(temp.value);
+            temp=temp.next;
+        }
+    }
+    //remover el ultimo nodo y reubicar el tail actual
+    public Node removeLast(){
+        if(length==0){
+            head=null;
+            tail=null;
+            return null;
+        }
+        Node temp=head;
+        Node pre=head;
+        while(temp.next!=null){
+            pre=temp;
+            temp=temp.next;
+        }
+        tail=pre;
+        tail.next=null;
+        length--;
+        return temp;
+    }
+    //remover el primer nodo y reubicar el head actual
+    public Node removeFirst(){
+    	if(length==0){
+        	return null;
+    	}
+    	Node temp=head;
+    	head=head.next;
+    	temp.next=null;
+    	length--;
+    	if(length==0){
+        	tail=null;
+    	}
+    	return temp;
+    }
+    //obtener el nodo indicado segun su indice actual
+    public Node get(int index){
+   	if(index < 0 || index >= length){
+        	return null;
+    	}
+    	Node temp=head;
+    	for(int i=0; i<index; i++){
+        	temp=temp.next;
+    	}
+    	return temp;
+    }
+    //obtener el nodo en el indice indicado y cambiar su valor actual
+    public boolean set(int index, int value){
+    	Node temp=get(index);
+   	if(temp==null){
+        	return false;
+   	}
+   	temp.value=value;
+   	return true;
+    }
+    //incertar un nodo en la lista ocupando el indice indicado
+    public boolean insert(int index, int value){
+   	if(index < 0 || index > length){//si esta fuera del rango no puede insertarse
+        	return false;
+   	}
+
+   	if(index == 0){//si el indice indicado es el primero (0)
+            Node newNode=new Node(value);//crea un nodo con un valor(value)
+            newNode.next=head;//este nodo sera el nuevo head
+            head=newNode; 
+            tail=newNode;
+            length++;
+            return true;
+    	}
+    	if(index == length){
+        	append(value);
+        	return true;
+    	}
+    	Node newNode=new Node(value);
+    	Node temp=head;
+    	for(int i=0; i<index-1; i++){
+        	temp=temp.next;
+    	}
+        //el nuevo nodo ocupara la pocicion del nodo actual y este se recorre a la siguiente pocicion aumentando en 1 el largo de la lista
+    	newNode.next=temp.next;
+    	temp.next=newNode;
+    	length++;
+    	return true;
+    }
+    public Node remove(int index){
+   	if(index < 0 || index >= length){
+        	return null;
+    	}
+    	if(index == 0){
+        	return removeFirst();
+    	}
+    	if(index == length-1){
+        	return removeLast();
+    	}
+    	Node prev=head;
+    	for(int i=0; i<index-1; i++){
+        	prev=prev.next;
+    	}
+    	Node temp=prev.next;
+    	prev.next=temp.next;
+    	temp.next=null;
+    	length--;
+    	return temp;
+    }
+    //añadir un nodo nuevo al inicio de la lista siendo este el nuevo head
+    public void prepend(int value){
+   	Node newNode = new Node(value);
+    	if(length == 0){
+        	head = newNode;
+        	tail = newNode;
+        	length++;
+        	return;
+    	}
+    	newNode.next = head;
+    	head = newNode;
+    	length++;
+    }
+    //encontrar el nodo central
+    public Node nodoCentral(){
+    	Node temp1 = head;
+    	Node temp2 = head;
+    	while(temp2 != null && temp2.next != null){
+        	temp1 = temp1.next;
+        	temp2 = temp2.next.next;
+    	}
+   	return temp1;
+    }
+    public boolean saberSiEsCiclado(){
+   	Node temp1 = head;
+    	Node temp2 = head;
+    	while(temp1 != null && temp2 != null && temp2.next != null){
+        	temp1 = temp1.next;
+        	temp2 = temp2.next.next;
+        	if(temp1 == temp2){
+            	return true;
+        	}
+    	}
+    	return false;
+    }
+    public void reverse(){
+    	Node temp = head;
+    	Node prev = null;
+    	Node next = null;
+    	tail = head;
+    	while(temp != null){
+        	next = temp.next;
+        	temp.next = prev;
+        	prev = temp;
+        	temp = next;
+   	}
+   	head = prev;
+    }
+}
